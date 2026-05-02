@@ -1736,8 +1736,8 @@
             align-items: stretch;
             padding: 0;
             border-top: none;
-            border-right: 1px solid var(--g200);
-            background: var(--g50);
+            border-right: 1px solid #222;
+            background: #111;
             z-index: 100;
             grid-row: 1;
             grid-column: 1;
@@ -1747,21 +1747,15 @@
         }
 
         .nav::before {
-            content: "Driver Pro";
-            display: flex;
-            align-items: center;
-            padding: 14px 14px 13px 44px;
-            font-size: 13px;
-            font-weight: 900;
-            letter-spacing: -.2px;
-            border-bottom: 1px solid var(--g200);
-            color: var(--black);
-            font-family: var(--font);
+            content: "";
+            display: block;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            background-color: #111;
             background-image: url('favicon.png');
             background-repeat: no-repeat;
-            background-size: 24px 24px;
-            background-position: 12px center;
-            min-height: 52px;
+            background-size: 36px 36px;
+            background-position: center center;
+            min-height: 60px;
             box-sizing: border-box;
         }
 
@@ -1789,16 +1783,16 @@
             gap: 5px;
             border-radius: 0;
             width: 100%;
-            border-bottom: 1px solid var(--g100);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             transition: background 0.12s;
         }
 
         .ni:hover {
-            background: var(--g100);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .ni.on {
-            background: var(--black);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .ni.on svg {
@@ -1813,12 +1807,13 @@
         .ni svg {
             width: 18px;
             height: 18px;
+            stroke: rgba(255, 255, 255, 0.5) !important;
         }
 
         .ni span {
             font-size: 10px;
             font-weight: 600;
-            color: var(--g600);
+            color: rgba(255, 255, 255, 0.5);
             text-align: center;
         }/* ── Content area ──────────────────────── */
 
@@ -2093,6 +2088,35 @@
         }
     }
 
+    @media (min-width: 900px) {
+        /* turnos desktop layout */
+        #turnos-desktop-layout {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            padding: 0 20px;
+            margin-bottom: 14px;
+        }
+
+        #turnos-col-left, #turnos-col-right {
+            min-width: 0;
+        }
+    }
+
+    @media (min-width: 900px) {
+        #turnos-desktop-layout {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            padding: 0 20px;
+            margin-bottom: 14px;
+        }
+
+        #turnos-col-left, #turnos-col-right {
+            min-width: 0;
+        }
+    }
+
     @media (min-width: 1280px) {
         #app {
             grid-template-columns: 170px 1fr;
@@ -2345,7 +2369,7 @@
                                     <line x1="5" y1="12" x2="19" y2="12"/>
                                 </svg>
 
-                                          + Viaje
+                                          Viaje
                                         
                             </button>
                             <button onclick="openModalWallet()" style="flex:1;padding:12px 8px;background:#fff;color:var(--black);border:1.5px solid var(--g200);border-radius:12px;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
@@ -2354,9 +2378,35 @@
                                     <line x1="5" y1="12" x2="19" y2="12"/>
                                 </svg>
 
-                                          + Pago
+                                          Pago
                                         
                             </button>
+                        </div>
+                        <!-- resumen mes turnos -->
+                        <div class="desk-card">
+                            <div class="dc-title">Resumen del mes — Turnos</div>
+                            <div class="desk-kpi-grid" style="margin:0">
+                                <div class="desk-kpi">
+                                    <div class="dki-lbl">Días trabajados</div>
+                                    <div class="dki-val" id="hd-dias-mes">—</div>
+                                    <div class="dki-sub">este mes</div>
+                                </div>
+                                <div class="desk-kpi">
+                                    <div class="dki-lbl">Días planificados</div>
+                                    <div class="dki-val" id="hd-dias-plan">—</div>
+                                    <div class="dki-sub">turnos</div>
+                                </div>
+                                <div class="desk-kpi">
+                                    <div class="dki-lbl">Me quedo mes</div>
+                                    <div class="dki-val cg" id="hd-neto-mes">$—</div>
+                                    <div class="dki-sub">este mes</div>
+                                </div>
+                                <div class="desk-kpi">
+                                    <div class="dki-lbl">Promedio/día</div>
+                                    <div class="dki-val" id="hd-prom-mes">$—</div>
+                                    <div class="dki-sub">días con viajes</div>
+                                </div>
+                            </div>
                         </div>
                         <!-- últimos 10 viajes -->
                         <div class="desk-card">
@@ -2535,6 +2585,36 @@
                 <!-- TAB: MOVIMIENTOS -->
 
                 <div id="bsub-movimientos" style="display:none">
+                    <!-- Gráficos de movimientos -->
+                    <div style="margin:12px 16px 0">
+                        <div style="background:#fff;border:1px solid var(--g200);border-radius:14px;padding:14px;margin-bottom:10px">
+                            <div style="font-size:11px;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Ingresos semana actual — por tipo</div>
+                            <div style="height:140px;position:relative">
+                                <canvas id="ch-bil-mov-sem">
+                                </canvas>
+                            </div>
+                            <div id="bil-mov-sem-legend" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"></div>
+                        </div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+                            <div style="background:var(--g50);border-radius:12px;padding:12px">
+                                <div style="font-size:10px;font-weight:700;color:var(--g600);text-transform:uppercase;margin-bottom:3px">Total semana</div>
+                                <div style="font-size:18px;font-weight:900" id="bil-mov-sem-total">$0</div>
+                                <div style="font-size:10px;color:var(--g400)" id="bil-mov-sem-count">0 movimientos</div>
+                            </div>
+                            <div style="background:var(--g50);border-radius:12px;padding:12px">
+                                <div style="font-size:10px;font-weight:700;color:var(--g600);text-transform:uppercase;margin-bottom:3px">Promedio/día</div>
+                                <div style="font-size:18px;font-weight:900" id="bil-mov-prom-dia">$0</div>
+                                <div style="font-size:10px;color:var(--g400)">días con movimientos</div>
+                            </div>
+                        </div>
+                        <div style="background:#fff;border:1px solid var(--g200);border-radius:14px;padding:14px;margin-bottom:10px">
+                            <div style="font-size:11px;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Últimos 7 días</div>
+                            <div style="height:110px;position:relative">
+                                <canvas id="ch-bil-mov-7dias">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
                     <div class="snav">
                         <button class="sbtn" onclick="navDate('wmov',-1)">
                             <svg viewBox="0 0 24 24">
@@ -3106,10 +3186,10 @@
                 <div id="gsub-pagos" style="display:none">
                     <div style="height:12px"></div>
                     <div class="psel" id="pagos-subtabs">
-                        <button class="pbtn on" onclick="setPagosTab('app',this)">En app</button>
-                        <button class="pbtn" onclick="setPagosTab('desglose',this)">Desglose</button>
+                        <button class="pbtn on" onclick="setPagosTab('desglose',this)">Desglose</button>
+                        <button class="pbtn" onclick="setPagosTab('app',this)">En app</button>
                     </div>
-                    <div id="pagos-sub-app">
+                    <div id="pagos-sub-app" style="display:none">
                         <div class="psel" id="pagos-app-psel">
                             <button class="pbtn on" onclick="setPagosAppPeriod('hoy',this)">Hoy</button>
                             <button class="pbtn" onclick="setPagosAppPeriod('ayer',this)">Ayer</button>
@@ -3170,7 +3250,7 @@
                             <div style="font-size:11px;color:var(--g400);margin-top:4px" id="fondo-meta">Meta: $50.000</div>
                         </div>
                     </div>
-                    <div id="pagos-sub-desglose" style="display:none">
+                    <div id="pagos-sub-desglose" style="display:block">
                         <div class="psel" id="pagos-psel">
                             <button class="pbtn on" onclick="setPagosPeriod('hoy',this)">Hoy</button>
                             <button class="pbtn" onclick="setPagosPeriod('ayer',this)">Ayer</button>
@@ -3309,6 +3389,16 @@
                             <div class="mval cr" id="comb-prom-dia">$—</div>
                             <div class="msub" id="comb-prom-dia-sub">por día trabajado</div>
                         </div>
+                        <div class="mbox">
+                            <div class="mlbl">Km de recogida</div>
+                            <div class="mval" id="comb-km-vacio">0 km</div>
+                            <div class="msub">Km vacío (registrado)</div>
+                        </div>
+                        <div class="mbox">
+                            <div class="mlbl">Km de traslado</div>
+                            <div class="mval" id="comb-km-viaje">0 km</div>
+                            <div class="msub">Km viaje (registrado)</div>
+                        </div>
                     </div>
                     <div class="slbl">Detalle por día</div>
                     <div id="comb-list"></div>
@@ -3388,6 +3478,236 @@
             <!-- MAPA -->
 
             <!-- page-mapa content moved to xsub-mapa -->
+
+            <!-- TURNOS -->
+
+            <div class="page" id="page-turnos">
+                <div class="ph">
+                    <div class="pt">Turnos</div>
+                </div>
+                <div class="stabs" id="ttabs">
+                    <button class="stab on" onclick="stabTurnos('turnos',this)">Calendario</button>
+                    <button class="stab" onclick="stabTurnos('horas',this)">Horas activas</button>
+                    <button class="stab" onclick="stabTurnos('cierres',this)">Cierres</button>
+                </div>
+
+                <!-- SUB: CALENDARIO (Turnos) -->
+                <div id="tsub-turnos">
+                    <div id="turnos-desktop-layout" style="display:block">
+                        <div id="turnos-col-left">
+                            <div style="height:12px"></div>
+                            <div style="display:flex;align-items:center;gap:8px;padding:0 16px;margin-bottom:12px">
+                                <button class="sbtn" onclick="chCal(-1)">
+                                    <svg viewBox="0 0 24 24">
+                                        <polyline points="15 18 9 12 15 6"/>
+                                    </svg>
+                                </button>
+                                <div style="flex:1;text-align:center;font-size:16px;font-weight:800" id="cal-lbl2">Abril 2026</div>
+                                <button class="sbtn" onclick="chCal(1)">
+                                    <svg viewBox="0 0 24 24">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="cal-wrap">
+                                <div class="calgrid" id="cal-grid2">
+                                    <div class="cdname">L</div>
+                                    <div class="cdname">M</div>
+                                    <div class="cdname">M</div>
+                                    <div class="cdname">J</div>
+                                    <div class="cdname">V</div>
+                                    <div class="cdname">S</div>
+                                    <div class="cdname">D</div>
+                                </div>
+                            </div>
+                            <div style="padding:16px;margin-top:8px">
+                                <button class="bp" onclick="openTurnoModal()">+ Planificar turno</button>
+                            </div>
+                            <div class="slbl">Turnos del mes</div>
+                            <div id="turnos-list2"></div>
+                        </div>
+                        <div id="turnos-col-right">
+                            <div class="desk-card" id="dc-turno-actual2" style="display:none">
+                                <div class="dc-title">
+                                    Turno del día · 
+                                    <span id="turno-actual-fecha2">—</span>
+                                </div>
+                                <div id="turno-actual-body2"></div>
+                            </div>
+                            <div class="desk-card">
+                                <div class="dc-title">Resumen del mes</div>
+                                <div class="desk-kpi-grid" style="margin-top:4px">
+                                    <div class="desk-kpi">
+                                        <div class="dki-lbl">Días trabajados</div>
+                                        <div class="dki-val" id="mas-dias-mes2">—</div>
+                                        <div class="dki-sub">este mes</div>
+                                    </div>
+                                    <div class="desk-kpi">
+                                        <div class="dki-lbl">Días planificados</div>
+                                        <div class="dki-val" id="mas-dias-plan2">—</div>
+                                        <div class="dki-sub">turnos</div>
+                                    </div>
+                                    <div class="desk-kpi desk-kpi-black">
+                                        <div class="dki-lbl">Promedio viajes/día</div>
+                                        <div class="dki-val" id="mas-avg-viajes2">—</div>
+                                        <div class="dki-sub">días con viajes</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="desk-card">
+                                <div class="dc-title">Me quedo por día — Este mes</div>
+                                <div class="dc-chart-wrap">
+                                    <canvas id="ch-turnos-mes">
+                                    </canvas>
+                                </div>
+                            </div>
+                            <div class="desk-card">
+                                <div class="dc-title">Horarios de mayor movimiento — Mes</div>
+                                <div class="dc-chart-wrap" style="height:170px">
+                                    <canvas id="ch-turnos-horarios">
+                                    </canvas>
+                                </div>
+                                <div style="font-size:10px;color:var(--g400);margin-top:6px;font-weight:600">Viajes del mes por hora, agrupados por día de semana</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB: HORAS ACTIVAS -->
+                <div id="tsub-horas" style="display:none">
+                    <div style="height:12px"></div>
+                    <!-- Selector período -->
+                    <div class="psel" style="margin:0 16px 12px">
+                        <button class="pbtn on" onclick="setHorasPeriod('semana',this)">Semana</button>
+                        <button class="pbtn" onclick="setHorasPeriod('mes',this)">Mes</button>
+                    </div>
+                    <!-- KPIs -->
+                    <div class="mgrid" id="horas-kpi-grid" style="grid-template-columns:1fr 1fr">
+                        <div class="mbox">
+                            <div class="mlbl">Horas de turno</div>
+                            <div class="mval" id="ha-turno">—</div>
+                            <div class="dki-sub">período</div>
+                        </div>
+                        <div class="mbox">
+                            <div class="mlbl">Horas efectivas</div>
+                            <div class="mval cg" id="ha-efectivo">—</div>
+                            <div class="dki-sub">en viajes</div>
+                        </div>
+                        <div class="mbox">
+                            <div class="mlbl">Horas inactivas</div>
+                            <div class="mval cr" id="ha-inactivo">—</div>
+                            <div class="dki-sub">turno − efectivo</div>
+                        </div>
+                        <div class="mbox">
+                            <div class="mlbl">Eficiencia</div>
+                            <div class="mval" id="ha-eficiencia">—</div>
+                            <div class="dki-sub">% tiempo en viajes</div>
+                        </div>
+                    </div>
+                    <!-- Gráfico: viajes por hora del día (heatmap semanal) -->
+                    <div class="card">
+                        <div style="font-size:11px;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Movimiento por hora — Últimas 4 semanas</div>
+                        <div style="height:180px;position:relative">
+                            <canvas id="ch-ha-heatmap">
+                            </canvas>
+                        </div>
+                    </div>
+                    <!-- Gráfico: viajes por día de la semana -->
+                    <div class="card">
+                        <div style="font-size:11px;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Viajes por día de semana</div>
+                        <div class="chwrap">
+                            <canvas id="ch-ha-diasem">
+                            </canvas>
+                        </div>
+                    </div>
+                    <!-- Gráfico: neto por hora del día (barras) -->
+                    <div class="card">
+                        <div style="font-size:11px;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Ingresos promedio por bloque horario</div>
+                        <div class="chwrap">
+                            <canvas id="ch-ha-ingresos-hora">
+                            </canvas>
+                        </div>
+                    </div>
+                    <!-- Gráfico: duración promedio por viaje -->
+                    <div class="card">
+                        <div style="font-size:11px;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Distribución de duración de viajes</div>
+                        <div class="chwrap">
+                            <canvas id="ch-ha-duracion">
+                            </canvas>
+                        </div>
+                    </div>
+                    <!-- Gráfico: tendencia neto últimas semanas -->
+                    <div class="card">
+                        <div style="font-size:11px;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Tendencia me quedo — últimas 8 semanas</div>
+                        <div class="chwrap">
+                            <canvas id="ch-ha-tendencia">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB: CIERRES -->
+                <div id="tsub-cierres" style="display:none">
+                    <div style="height:12px"></div>
+                    <div style="padding:0 16px 4px">
+                        <div class="cflat" style="margin:0 0 12px">
+                            <div style="font-size:12px;font-weight:700;color:var(--g600);margin-bottom:4px">
+                                HOY · 
+                                <span id="cierre-fecha2"></span>
+                            </div>
+                            <div style="display:flex;align-items:center;justify-content:space-between">
+                                <div>
+                                    <div style="font-size:20px;font-weight:900" id="cierre-bruto2">$0 bruto</div>
+                                    <div style="font-size:13px;color:var(--g600)" id="cierre-viajes2">0 viajes</div>
+                                </div>
+                                <button class="bp" style="width:auto;padding:10px 18px;font-size:14px" onclick="toggleCierreForm2()">+ Cerrar día</button>
+                            </div>
+                        </div>
+                        <div id="cierre-form-wrap2" style="display:none;background:var(--g50);border-radius:14px;padding:16px;margin-bottom:16px">
+                            <div class="fg">
+                                <label class="fl">Fecha del cierre</label>
+                                <input class="fi" type="date" id="c-fecha2" onchange="onCierreFechaChange(this.value)">
+                            </div>
+                            <div class="fg">
+                                <label class="fl">Km totales</label>
+                                <input class="fi" type="number" id="c-km2" placeholder="180" inputmode="numeric">
+                            </div>
+                            <div class="fg">
+                                <label class="fl">Horas trabajadas</label>
+                                <input class="fi" type="number" id="c-hrs2" placeholder="8.5" inputmode="decimal" step="0.5">
+                            </div>
+                            <div class="fg">
+                                <label class="fl">Rendimiento (km/litro)</label>
+                                <input class="fi" type="number" id="c-rend2" placeholder="16" inputmode="decimal" step="0.1">
+                            </div>
+                            <div class="fg">
+                                <label class="fl">¿Cargaste bencina hoy?</label>
+                                <div class="popts">
+                                    <button class="popt" onclick="toggleBen2(true,this)">Sí</button>
+                                    <button class="popt on" onclick="toggleBen2(false,this)">No</button>
+                                </div>
+                            </div>
+                            <div id="ben-fields2" style="display:none">
+                                <div class="fgrid">
+                                    <div class="fg">
+                                        <label class="fl">Litros cargados</label>
+                                        <input class="fi" type="number" id="c-lit2" placeholder="30" inputmode="decimal">
+                                    </div>
+                                    <div class="fg">
+                                        <label class="fl">Precio / litro</label>
+                                        <input class="fi" type="number" id="c-pli2" placeholder="1200" inputmode="numeric">
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="bp bgreen" onclick="saveCierreHoy2()">Guardar cierre del día</button>
+                            <div style="height:8px"></div>
+                            <button class="bs" onclick="toggleCierreForm2()">Cancelar</button>
+                        </div>
+                    </div>
+                    <div class="slbl">Historial de cierres</div>
+                    <div id="cierres-list2"></div>
+                </div>
+            </div>
 
             <!-- MÁS -->
 
@@ -3801,6 +4121,15 @@
                     <path d="M2 10h20"/>
                 </svg>
                 <span>Billetera</span>
+            </button>
+            <button class="ni" onclick="showTab('turnos')" id="ni-turnos">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <span>Turnos</span>
             </button>
             <button class="ni" onclick="showTab('mas')" id="ni-mapa" style="display:none"></button>
             <button class="ni" onclick="showTab('mas')" id="ni-mas">
@@ -5473,6 +5802,11 @@
             renderTurnos();
             renderMasDesktop();
         }
+        if (id === 'turnos') {
+            renderCalTurnos();
+            renderTurnosList2();
+            renderTurnosDesktop();
+        }
         const fbs = document.getElementById('fb-status');
         if (fbs)
             fbs.textContent = navigator.onLine ? 'Conectado a Firebase' : 'Offline';
@@ -5532,8 +5866,17 @@
         }
         if (prefix === 'g' && sub === 'historial')
             renderGHist();
-        if (prefix === 'g' && sub === 'pagos')
+        if (prefix === 'g' && sub === 'pagos') {
+            // reset pagos to desglose tab
+            const pAppEl = document.getElementById('pagos-sub-app');
+            if (pAppEl)
+                pAppEl.style.display = 'none';
+            const pDesEl = document.getElementById('pagos-sub-desglose');
+            if (pDesEl)
+                pDesEl.style.display = 'block';
+            document.querySelectorAll('#pagos-subtabs .pbtn').forEach((b, i) => b.classList.toggle('on', i === 0));
             renderPagos();
+        }
         if (prefix === 'g' && sub === 'combustible')
             resetCombFiltro();
         if (prefix === 'g' && sub === 'uber')
@@ -6570,16 +6913,22 @@
             const trH = hoy.filter(v => v.pago === 'tr').reduce((a, v) => a + v.monto, 0);
 
             // Chart 1: Dona pagos hoy
+            // pagos semana (dona)
             if (window._chDeskPagosHoy)
                 window._chDeskPagosHoy.destroy();
             const cvsPH = document.getElementById('ch-desk-pagos-hoy');
-            if (cvsPH && (efH + tkH + trH) > 0) {
+            // Use semana data not just today
+            const efSemH = sem.filter(v => v.pago === 'ef').reduce((a, v) => a + v.monto, 0);
+            const tkSemH = sem.filter(v => v.pago === 'tk').reduce((a, v) => a + v.monto, 0);
+            const trSemH = sem.filter(v => v.pago === 'tr').reduce((a, v) => a + v.monto, 0);
+            const totSemH = efSemH + tkSemH + trSemH;
+            if (cvsPH && totSemH > 0) {
                 window._chDeskPagosHoy = new Chart(cvsPH, {
                     type: 'doughnut',
                     data: {
                         labels: ['Efectivo', 'Pago en app', 'Transfer.'],
                         datasets: [{
-                            data: [efH, tkH, trH],
+                            data: [efSemH, tkSemH, trSemH],
                             backgroundColor: ['#000', '#276EF1', '#FFC043'],
                             borderWidth: 0,
                             hoverOffset: 4
@@ -6595,7 +6944,7 @@
                             },
                             tooltip: {
                                 callbacks: {
-                                    label: ctx => ctx.label + ': ' + CLP(ctx.raw) + ' (' + Math.round(ctx.raw / (efH + tkH + trH) * 100) + '%)'
+                                    label: ctx => ctx.label + ': ' + CLP(ctx.raw) + ' (' + Math.round(ctx.raw / totSemH * 100) + '%)'
                                 }
                             }
                         }
@@ -6603,13 +6952,13 @@
                 });
                 const legEl = document.getElementById('dc-pagos-hoy-legend');
                 if (legEl)
-                    legEl.innerHTML = [['Efectivo', '#000', efH], ['Pago en app', '#276EF1', tkH], ['Transfer.', '#FFC043', trH]].filter(x => x[2] > 0).map(x => '<div class="dc-legend-item"><div class="dc-legend-dot" style="background:' + x[1] + '"></div><span>' + x[0] + ': ' + CLP(x[2]) + '</span></div>').join('');
+                    legEl.innerHTML = [['Efectivo', '#000', efSemH], ['Pago en app', '#276EF1', tkSemH], ['Transfer.', '#FFC043', trSemH]].filter(x => x[2] > 0).map(x => '<div class="dc-legend-item"><div class="dc-legend-dot" style="background:' + x[1] + '"></div><span>' + x[0] + ': ' + CLP(x[2]) + '</span></div>').join('');
             } else if (cvsPH) {
                 const ctx = cvsPH.getContext('2d');
                 ctx.clearRect(0, 0, cvsPH.width, cvsPH.height);
                 const legEl = document.getElementById('dc-pagos-hoy-legend');
                 if (legEl)
-                    legEl.innerHTML = '<span style="font-size:12px;color:var(--g400)">Sin viajes hoy</span>';
+                    legEl.innerHTML = '<span style="font-size:12px;color:var(--g400)">Sin viajes esta semana</span>';
             }
 
             // Chart 2: Barras semana apiladas (ef/tk/tr por día) — "me quedo" neto por día
@@ -6779,6 +7128,23 @@
 
             // Horarios inicio desktop
             renderHorarioChart();
+
+            // KPIs mes para la card de turnos en inicio
+            const mesActStr = today().slice(0, 7);
+            const vMesAct = VIAJES.filter(v => v.fecha.startsWith(mesActStr));
+            const diasMesAct = [...new Set(vMesAct.map(v => v.fecha))];
+            const diasPlanMes = TURNOS.filter(t => t.fecha.startsWith(mesActStr)).length;
+            const netoMes = diasMesAct.reduce((a, f) => a + calcMetrics(vByDate(f)).quedo, 0);
+            const promMes = diasMesAct.length > 0 ? Math.round(netoMes / diasMesAct.length) : 0;
+            const setE2 = (id, v) => {
+                const e = document.getElementById(id);
+                if (e)
+                    e.textContent = v;
+            };
+            setE2('hd-dias-mes', diasMesAct.length);
+            setE2('hd-dias-plan', diasPlanMes);
+            setE2('hd-neto-mes', CLP(netoMes));
+            setE2('hd-prom-mes', promMes > 0 ? CLP(promMes) : '$—');
 
             // Últimos viajes en columna derecha
             const hdLast10 = document.getElementById('hd-last10');
@@ -8765,11 +9131,21 @@
         return h > 0 ? (h + 'h' + (min > 0 ? ' ' + min + 'min' : '')) : (min + 'min');
     }
 
+    function turnoLabel(fechaStr) {
+        const hoyStr = today();
+        if (fechaStr === hoyStr)
+            return 'Hoy';
+        const manana = new Date(hoyStr + 'T12:00:00');
+        manana.setDate(manana.getDate() + 1);
+        const manStr = manana.toISOString().slice(0, 10);
+        if (fechaStr === manStr)
+            return 'Mañana';
+        return 'Siguiente';
+    }
     function renderTurnoActualCard() {
         if (window.innerWidth < 900)
             return;
         const hoyStr = today();
-        // Find today's turno (or most recent upcoming)
         const turnoHoy = TURNOS.find(t => t.fecha === hoyStr) || TURNOS.filter(t => t.fecha >= hoyStr).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
         const card = document.getElementById('dc-turno-actual');
         if (!card)
@@ -8779,9 +9155,10 @@
             return;
         }
         card.style.display = 'block';
+        const lbl = turnoLabel(turnoHoy.fecha);
         const fechaEl = document.getElementById('turno-actual-fecha');
         if (fechaEl)
-            fechaEl.textContent = fmtD(turnoHoy.fecha);
+            fechaEl.textContent = lbl + ' · ' + fmtD(turnoHoy.fecha);
         const vsD = vByDate(turnoHoy.fecha);
         const tTurno = turnoMins(turnoHoy);
         const tCol = colMins(turnoHoy);
@@ -8821,7 +9198,11 @@
             return;
         }
         el.innerHTML = '';
-        TURNOS.slice(0, 12).forEach(t => {
+        // Filter by current calendar month
+        const mesIniT = calY + '-' + String(calM + 1).padStart(2, '0') + '-01';
+        const mesUltT = calY + '-' + String(calM + 1).padStart(2, '0') + '-' + String(new Date(calY, calM + 1, 0).getDate()).padStart(2, '0');
+        const turnosMes = TURNOS.filter(t => t.fecha >= mesIniT && t.fecha <= mesUltT).sort((a, b) => b.fecha.localeCompare(a.fecha));
+        turnosMes.forEach(t => {
             const tTurno = turnoMins(t);
             const tCol = colMins(t);
             const tNeto = calcMins(t);
@@ -8942,8 +9323,11 @@
                 cur.setDate(cur.getDate() + 1);
             }
             const labels = dias.map(d => parseInt(d.slice(8)));
-            const data = dias.map(d => vByDate(d).reduce((a, v) => a + v.monto, 0));
-            const colors = dias.map(d => data[dias.indexOf(d)] > 0 ? '#000' : '#e0e0e0');
+            const data = dias.map(d => {
+                const m = calcMetrics(vByDate(d));
+                return m.quedo;
+            });
+            const colors = dias.map(d => data[dias.indexOf(d)] > 0 ? '#00A651' : '#e0e0e0');
             window._chMasMes = new Chart(cvsMM, {
                 type: 'bar',
                 data: {
@@ -8964,7 +9348,7 @@
                         },
                         tooltip: {
                             callbacks: {
-                                label: ctx => CLP(ctx.raw)
+                                label: ctx => 'Me quedo: ' + CLP(ctx.raw)
                             }
                         }
                     },
@@ -11537,6 +11921,874 @@
         } catch (e) {
             toast('Error: ' + e.message);
         }
+    };
+
+    // ══════════════════════════════════════════════════════════
+    // PAGE-TURNOS Functions
+    // ══════════════════════════════════════════════════════════
+
+    // stabTurnos — sub-tab switcher for page-turnos
+    window.stabTurnos = function(sub, btn) {
+        ['tsub-turnos', 'tsub-horas', 'tsub-cierres'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el)
+                el.style.display = 'none';
+        });
+        const target = document.getElementById('tsub-' + sub);
+        if (target)
+            target.style.display = 'block';
+        document.querySelectorAll('#ttabs .stab').forEach(t => t.classList.remove('on'));
+        if (btn)
+            btn.classList.add('on');
+        if (sub === 'horas')
+            renderHorasActivas();
+        if (sub === 'cierres') {
+            renderCierres2();
+            renderCierreInfo2();
+        }
+        if (sub === 'turnos') {
+            renderCalTurnos();
+            renderTurnosList2();
+            renderTurnosDesktop();
+        }
+    };
+
+    // Calendar for page-turnos (reuses calY/calM and TURNOS/VIAJES)
+    function renderCalTurnos() {
+        const lbl = document.getElementById('cal-lbl2');
+        if (lbl)
+            lbl.textContent = MONTHS[calM] + ' ' + calY;
+        const d = new Date(calY, calM, 1);
+        const rawDay = d.getDay();
+        const first = rawDay === 0 ? 6 : rawDay - 1;
+        const days = new Date(calY, calM + 1, 0).getDate();
+        const tod = today();
+        const grid = document.getElementById('cal-grid2');
+        if (!grid)
+            return;
+        while (grid.children.length > 7)
+            grid.removeChild(grid.lastChild);
+        for (let i = 0; i < first; i++) {
+            const e = document.createElement('div');
+            e.className = 'cday empty';
+            grid.appendChild(e);
+        }
+        for (let day = 1; day <= days; day++) {
+            const ds = calY + '-' + String(calM + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+            const hasTurno = TURNOS.some(t => t.fecha === ds);
+            const hasV = VIAJES.some(v => v.fecha === ds);
+            let cls = 'cday';
+            if (hasV)
+                cls += ' worked';
+            else if (hasTurno)
+                cls += ' planned';
+            if (ds === tod)
+                cls += ' today';
+            const cell = document.createElement('div');
+            cell.className = cls;
+            cell.textContent = day;
+            if (hasTurno || hasV) {
+                const dot = document.createElement('div');
+                dot.className = 'cdot';
+                cell.appendChild(dot);
+            }
+            cell.addEventListener('click', () => calClick(ds));
+            grid.appendChild(cell);
+        }
+    }
+
+    // Turnos list for page-turnos (filtered by current month)
+    function renderTurnosList2() {
+        const el = document.getElementById('turnos-list2');
+        if (!el)
+            return;
+        const mesIniT = calY + '-' + String(calM + 1).padStart(2, '0') + '-01';
+        const mesUltT = calY + '-' + String(calM + 1).padStart(2, '0') + '-' + String(new Date(calY, calM + 1, 0).getDate()).padStart(2, '0');
+        const turnosMes = TURNOS.filter(t => t.fecha >= mesIniT && t.fecha <= mesUltT).sort((a, b) => b.fecha.localeCompare(a.fecha));
+        if (!turnosMes.length) {
+            el.innerHTML = '<div class="empty"><div class="etxt">Sin turnos en este mes</div></div>';
+            return;
+        }
+        el.innerHTML = '';
+        turnosMes.forEach(t => {
+            const tTurno = turnoMins(t);
+            const tCol = colMins(t);
+            const tNeto = calcMins(t);
+            const vsD = vByDate(t.fecha);
+            const tEfectivo = vsD.reduce((a, v) => a + (parseInt(v.durMin) || 0), 0);
+            const row = document.createElement('div');
+            row.className = 'trow';
+            row.innerHTML = '<div class="tico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>'
+            + '<div class="tinfo">'
+            + '<div class="tname">' + fmtD(t.fecha) + (t.nota ? ' · ' + t.nota : '') + '</div>'
+            + '<div class="tmeta">' + t.ini + '–' + t.fin + (tCol > 0 ? ' · col. ' + fmtMins(tCol) : '') + '</div>'
+            + (tEfectivo > 0 ? '<div class="tmeta" style="color:var(--green)">⚡ Efectivo: ' + fmtMins(tEfectivo) + ' / Turno: ' + fmtMins(tNeto) + '</div>' : '<div class="tmeta">Turno: ' + fmtMins(tNeto) + '</div>')
+            + '</div>'
+            + '<div class="tactions">'
+            + '<button class="tacbtn tacedit">✏️</button>'
+            + '<button class="tacbtn tacdel">🗑️</button>'
+            + '</div>';
+            row.querySelectorAll('.tacedit')[0].addEventListener('click', function() {
+                editTurno(t._fid);
+            });
+            row.querySelectorAll('.tacdel')[0].addEventListener('click', function() {
+                confirmDel('turno', t._fid, 'turno ' + fmtD(t.fecha));
+            });
+            el.appendChild(row);
+        });
+    }
+
+    // Desktop right panel for page-turnos
+    function renderTurnosDesktop() {
+        if (window.innerWidth < 900)
+            return;
+        const mesY = calY,
+            mesM = calM;
+        const priStr = mesY + '-' + String(mesM + 1).padStart(2, '0') + '-01';
+        const ultDia = new Date(mesY, mesM + 1, 0).getDate();
+        const ultStr = mesY + '-' + String(mesM + 1).padStart(2, '0') + '-' + String(ultDia).padStart(2, '0');
+        const vMes = VIAJES.filter(v => v.fecha >= priStr && v.fecha <= ultStr);
+        const diasConViajes = [...new Set(vMes.map(v => v.fecha))];
+        const diasPlan = TURNOS.filter(t => t.fecha >= priStr && t.fecha <= ultStr).length;
+        const avgViajes = diasConViajes.length > 0 ? Math.round(vMes.length / diasConViajes.length * 10) / 10 : 0;
+        const setEl = (id, v) => {
+            const e = document.getElementById(id);
+            if (e)
+                e.textContent = v;
+        };
+        setEl('mas-dias-mes2', diasConViajes.length);
+        setEl('mas-dias-plan2', diasPlan);
+        setEl('mas-avg-viajes2', avgViajes);
+
+        // Turno actual card 2
+        const hoyStr = today();
+        const turnoHoy = TURNOS.find(t => t.fecha === hoyStr) || TURNOS.filter(t => t.fecha >= hoyStr).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
+        const card2 = document.getElementById('dc-turno-actual2');
+        if (card2) {
+            if (!turnoHoy) {
+                card2.style.display = 'none';
+            }
+            else {
+                card2.style.display = 'block';
+                const lbl2 = turnoLabel(turnoHoy.fecha);
+                const fechaEl2 = document.getElementById('turno-actual-fecha2');
+                if (fechaEl2)
+                    fechaEl2.textContent = lbl2 + ' · ' + fmtD(turnoHoy.fecha);
+                const vsD = vByDate(turnoHoy.fecha);
+                const tTurno = turnoMins(turnoHoy);
+                const tCol = colMins(turnoHoy);
+                const tNeto = calcMins(turnoHoy);
+                const tEfectivo = vsD.reduce((a, v) => a + (parseInt(v.durMin) || 0), 0);
+                const diferencia = tNeto - tEfectivo;
+                const m = calcMetrics(vsD);
+                const horasE = tEfectivo > 0 ? (tEfectivo / 60) : 0;
+                const horasN = tNeto > 0 ? (tNeto / 60) : 0;
+                const quedoneto = m.quedo;
+                const valorXhoraTurno = horasN > 0 ? Math.round(quedoneto / horasN) : 0;
+                const valorXviaje = m.viajes > 0 ? Math.round(quedoneto / m.viajes) : 0;
+                const viajesXhoraE = horasE > 0 ? (m.viajes / horasE).toFixed(1) : 0;
+                const body2 = document.getElementById('turno-actual-body2');
+                if (body2)
+                    body2.innerHTML =
+                    '<div class="desk-kpi-grid" style="margin-bottom:8px">'
+                    + '<div class="desk-kpi"><div class="dki-lbl">Tiempo turno</div><div class="dki-val">' + fmtMins(tNeto) + '</div><div class="dki-sub">' + turnoHoy.ini + ' – ' + turnoHoy.fin + '</div></div>'
+                    + '<div class="desk-kpi"><div class="dki-lbl">Tiempo efectivo</div><div class="dki-val" style="color:var(--green)">' + (tEfectivo > 0 ? fmtMins(tEfectivo) : '—') + '</div><div class="dki-sub">viajes registrados</div></div>'
+                    + (tCol > 0 ? '<div class="desk-kpi"><div class="dki-lbl">Colación</div><div class="dki-val">' + fmtMins(tCol) + '</div></div>' : '')
+                    + (tEfectivo > 0 ? '<div class="desk-kpi"><div class="dki-lbl">Sin viaje</div><div class="dki-val cr">' + fmtMins(diferencia) + '</div><div class="dki-sub">turno − efectivo</div></div>' : '')
+                    + '</div>'
+                    + (m.viajes > 0 ? '<div class="desk-kpi-grid">'
+                    + '<div class="desk-kpi desk-kpi-black" style="grid-column:span 2"><div class="dki-lbl">Me quedo</div><div class="dki-val">' + CLP(quedoneto) + '</div><div class="dki-sub">' + m.viajes + ' viajes</div></div>'
+                    + '<div class="desk-kpi"><div class="dki-lbl">Valor × hora</div><div class="dki-val">' + (valorXhoraTurno > 0 ? CLP(valorXhoraTurno) + '/h' : '—') + '</div></div>'
+                    + '<div class="desk-kpi"><div class="dki-lbl">Promedio × viaje</div><div class="dki-val">' + (valorXviaje > 0 ? CLP(valorXviaje) : '—') + '</div></div>'
+                    + '<div class="desk-kpi"><div class="dki-lbl">Viajes × hora</div><div class="dki-val">' + viajesXhoraE + '</div></div>'
+                    + '</div>' : '');
+            }
+        }
+
+        // Chart: me quedo por día del mes
+        if (window._chTurnosMes)
+            window._chTurnosMes.destroy();
+        const cvsTM = document.getElementById('ch-turnos-mes');
+        if (cvsTM) {
+            const dias = [];
+            let cur = new Date(priStr + 'T12:00:00');
+            const fin = new Date(ultStr + 'T12:00:00');
+            while (cur <= fin) {
+                dias.push(cur.toISOString().slice(0, 10));
+                cur.setDate(cur.getDate() + 1);
+            }
+            const labels = dias.map(d => parseInt(d.slice(8)));
+            const data = dias.map(d => {
+                const m = calcMetrics(vByDate(d));
+                return m.quedo;
+            });
+            const colors = dias.map(d => data[dias.indexOf(d)] > 0 ? '#00A651' : '#e0e0e0');
+            window._chTurnosMes = new Chart(cvsTM, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        data,
+                        backgroundColor: colors,
+                        borderRadius: 4,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => 'Me quedo: ' + CLP(ctx.raw)
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 9,
+                                    weight: '600'
+                                },
+                                color: '#9e9e9e'
+                            }
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        // Horarios heatmap
+        const vMesCal = VIAJES.filter(v => v.fecha >= priStr && v.fecha <= ultStr);
+        drawHeatmap(document.getElementById('ch-turnos-horarios'), '_chTurnosHorarios', vMesCal);
+    }
+
+    // Cierres para page-turnos
+    function renderCierres2() {
+        const el = document.getElementById('cierres-list2');
+        if (!el)
+            return;
+        const sorted = Object.entries(CIERRES).sort((a, b) => b[0].localeCompare(a[0]));
+        if (!sorted.length) {
+            el.innerHTML = '<div class="empty"><div class="etxt">Sin cierres registrados</div></div>';
+            return;
+        }
+        el.innerHTML = '';
+        sorted.forEach(([fecha, c]) => {
+            const vs = vByDate(fecha);
+            const bruto = vs.reduce((a, v) => a + v.monto, 0);
+            const incDia = INCENTIVOS.filter(i => i.cerrado && i.montoCobrado > 0 && i.fechaCierre === fecha).reduce((a, i) => a + (i.montoCobrado || 0), 0);
+            const row = document.createElement('div');
+            row.className = 'trow';
+            row.innerHTML = '<div class="tico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>'
+            + '<div class="tinfo"><div class="tname">' + fmtD(fecha) + '</div>'
+            + '<div class="tmeta">' + vs.length + ' viajes · ' + (c.km || 0) + ' km · ' + (c.hrs || 0) + 'h · ' + litrosConsumidos(c).toFixed(1) + 'L comb.</div></div>'
+            + '<div class="tamt g">' + CLP(bruto + incDia) + '</div>';
+            el.appendChild(row);
+        });
+    }
+
+    function renderCierreInfo2() {
+        const hoy = vByDate(today());
+        const bruto = hoy.reduce((a, v) => a + v.monto, 0);
+        const now = new Date();
+        const fechaEl = document.getElementById('cierre-fecha2');
+        const brutoEl = document.getElementById('cierre-bruto2');
+        const viajesEl = document.getElementById('cierre-viajes2');
+        if (fechaEl)
+            fechaEl.textContent = now.toLocaleDateString('es-CL', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long'
+            });
+        if (brutoEl)
+            brutoEl.textContent = CLP(bruto) + ' bruto';
+        if (viajesEl)
+            viajesEl.textContent = hoy.length + ' viajes hoy';
+    }
+
+    window.toggleCierreForm2 = function() {
+        const wrap = document.getElementById('cierre-form-wrap2');
+        if (!wrap)
+            return;
+        const open = wrap.style.display === 'none' || wrap.style.display === '';
+        wrap.style.display = open ? 'block' : 'none';
+        if (open) {
+            const cFechaEl = document.getElementById('c-fecha2');
+            if (cFechaEl) {
+                cFechaEl.value = today();
+                cFechaEl.max = today();
+            }
+            const c = CIERRES[today()];
+            const rendEl = document.getElementById('c-rend2');
+            if (c) {
+                if (c.km)
+                    document.getElementById('c-km2').value = c.km;
+                if (c.hrs)
+                    document.getElementById('c-hrs2').value = c.hrs;
+                if (rendEl && c.rend)
+                    rendEl.value = c.rend;
+            } else {
+                if (rendEl)
+                    rendEl.value = CONFIG.rend || 16;
+            }
+        }
+    };
+
+    window.toggleBen2 = function(val, btn) {
+        const fields = document.getElementById('ben-fields2');
+        if (fields)
+            fields.style.display = val ? 'block' : 'none';
+        btn.closest('.popts').querySelectorAll('.popt').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+    };
+
+    window.saveCierreHoy2 = async function() {
+        const fecha = document.getElementById('c-fecha2').value || today();
+        const km = parseFloat(document.getElementById('c-km2').value) || 0;
+        const hrs = parseFloat(document.getElementById('c-hrs2').value) || 0;
+        const rend = parseFloat(document.getElementById('c-rend2').value) || CONFIG.rend || 16;
+        const lit = parseFloat(document.getElementById('c-lit2')?.value) || 0;
+        const pli = parseFloat(document.getElementById('c-pli2')?.value) || CONFIG.bencina || 1200;
+        try {
+            await setDoc(doc(db, 'cierres', fecha), {
+                km,
+                hrs,
+                rend,
+                lit,
+                pli
+            });
+            toast('Cierre guardado');
+            document.getElementById('cierre-form-wrap2').style.display = 'none';
+            renderCierres2();
+            renderCierreInfo2();
+        } catch (e) {
+            toast('Error: ' + e.message);
+        }
+    };
+
+    // ══════════════════════════════════════════════════════════
+    // HORAS ACTIVAS
+    // ══════════════════════════════════════════════════════════
+    let horasPeriod = 'semana';
+    window.setHorasPeriod = function(p, btn) {
+        horasPeriod = p;
+        document.querySelectorAll('#tsub-horas .pbtn').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        renderHorasActivas();
+    };
+
+    function renderHorasActivas() {
+        const hoyStr = today();
+        let viajes = [],
+            fechasRef = [];
+        if (horasPeriod === 'semana') {
+            const lun = lunesDe(hoyStr);
+            const d = new Date(lun + 'T12:00:00');
+            for (let i = 0; i < 7; i++) {
+                const dd = new Date(d);
+                dd.setDate(dd.getDate() + i);
+                fechasRef.push(dd.toISOString().slice(0, 10));
+            }
+        } else {
+            const mesStr = hoyStr.slice(0, 7);
+            const lastDay = new Date(parseInt(mesStr.slice(0, 4)), parseInt(mesStr.slice(5, 7)), 0).getDate();
+            for (let i = 1; i <= lastDay; i++)
+                fechasRef.push(mesStr + '-' + String(i).padStart(2, '0'));
+        }
+        viajes = VIAJES.filter(v => fechasRef.includes(v.fecha));
+
+        // KPIs: horas turno y horas efectivas desde turnos/viajes
+        const turnosPeriodo = TURNOS.filter(t => fechasRef.includes(t.fecha));
+        let hTurno = 0,
+            hEfectivo = 0;
+        turnosPeriodo.forEach(t => {
+            hTurno += calcMins(t) / 60;
+        });
+        fechasRef.forEach(f => {
+            const vs = vByDate(f);
+            hEfectivo += vs.reduce((a, v) => a + (parseInt(v.durMin) || 0), 0) / 60;
+        });
+        const hInactivo = Math.max(0, hTurno - hEfectivo);
+        const eficiencia = hTurno > 0 ? Math.round(hEfectivo / hTurno * 100) : 0;
+        const fmtH = h => h > 0 ? h.toFixed(1) + 'h' : '—';
+        const setEl = (id, v) => {
+            const e = document.getElementById(id);
+            if (e)
+                e.textContent = v;
+        };
+        setEl('ha-turno', fmtH(hTurno));
+        setEl('ha-efectivo', fmtH(hEfectivo));
+        setEl('ha-inactivo', fmtH(hInactivo));
+        setEl('ha-eficiencia', eficiencia > 0 ? eficiencia + '%' : '—');
+
+        // Heatmap (reusa drawHeatmap)
+        const hoy = today();
+        const lunHoy = lunesDe(hoy);
+        let vLast4 = [];
+        for (let s = 0; s < 4; s++) {
+            const d = new Date(lunHoy + 'T12:00:00');
+            d.setDate(d.getDate() - s * 7);
+            const ini = d.toISOString().slice(0, 10);
+            for (let i = 0; i < 7; i++) {
+                const dd = new Date(ini + 'T12:00:00');
+                dd.setDate(dd.getDate() + i);
+                vLast4 = vLast4.concat(VIAJES.filter(v => v.fecha === dd.toISOString().slice(0, 10)));
+            }
+        }
+        setTimeout(() => drawHeatmap(document.getElementById('ch-ha-heatmap'), '_chHaHeatmap', vLast4), 50);
+
+        // Viajes por día de semana
+        const cvsDS = document.getElementById('ch-ha-diasem');
+        if (cvsDS) {
+            if (window._chHaDiaSem)
+                window._chHaDiaSem.destroy();
+            const DIAS_ES = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+            const cnts = Array(7).fill(0);
+            viajes.forEach(v => {
+                const dow = new Date(v.fecha + 'T12:00:00').getDay();
+                cnts[dow === 0 ? 6 : dow - 1]++;
+            });
+            window._chHaDiaSem = new Chart(cvsDS, {
+                type: 'bar',
+                data: {
+                    labels: DIAS_ES,
+                    datasets: [{
+                        data: cnts,
+                        backgroundColor: cnts.map((_, i) => i === new Date(hoyStr + 'T12:00:00').getDay() - 1 || (new Date(hoyStr + 'T12:00:00').getDay() === 0 && i === 6) ? '#000' : '#e0e0e0'),
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => ctx.raw + ' viajes'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 11,
+                                    weight: '700'
+                                }
+                            }
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Ingresos por bloque horario
+        const cvsIH = document.getElementById('ch-ha-ingresos-hora');
+        if (cvsIH) {
+            if (window._chHaIngHora)
+                window._chHaIngHora.destroy();
+            const BLOQUES = ['6-8', '8-10', '10-12', '12-14', '14-16', '16-18', '18-20', '20-22', '22+'];
+            const getBloque = hora => {
+                const h = parseInt((hora || '00').split(':')[0]);
+                if (h < 8)
+                    return 0;
+                if (h < 10)
+                    return 1;
+                if (h < 12)
+                    return 2;
+                if (h < 14)
+                    return 3;
+                if (h < 16)
+                    return 4;
+                if (h < 18)
+                    return 5;
+                if (h < 20)
+                    return 6;
+                if (h < 22)
+                    return 7;
+                return 8;
+            };
+            const sumBloque = Array(9).fill(0);
+            const cntBloque = Array(9).fill(0);
+            vLast4.forEach(v => {
+                const b = getBloque(v.hora || '00:00');
+                sumBloque[b] += v.monto;
+                cntBloque[b]++;
+            });
+            const avgBloque = sumBloque.map((s, i) => cntBloque[i] > 0 ? Math.round(s / cntBloque[i]) : 0);
+            const maxA = Math.max(1, ...avgBloque);
+            window._chHaIngHora = new Chart(cvsIH, {
+                type: 'bar',
+                data: {
+                    labels: BLOQUES,
+                    datasets: [{
+                        data: avgBloque,
+                        backgroundColor: avgBloque.map(v => v === maxA ? '#000' : 'rgba(0,166,81,0.6)'),
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => CLP(ctx.raw) + ' promedio'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 10,
+                                    weight: '700'
+                                }
+                            }
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Distribución de duración de viajes
+        const cvsDur = document.getElementById('ch-ha-duracion');
+        if (cvsDur) {
+            if (window._chHaDur)
+                window._chHaDur.destroy();
+            const buckets = ['<5min', '5-10', '10-15', '15-20', '20-30', '>30'];
+            const cntsD = Array(6).fill(0);
+            viajes.forEach(v => {
+                const m = parseInt(v.durMin) || 0;
+                if (m < 5)
+                    cntsD[0]++;
+                else if (m < 10)
+                    cntsD[1]++;
+                else if (m < 15)
+                    cntsD[2]++;
+                else if (m < 20)
+                    cntsD[3]++;
+                else if (m < 30)
+                    cntsD[4]++;
+                else
+                    cntsD[5]++;
+            });
+            window._chHaDur = new Chart(cvsDur, {
+                type: 'doughnut',
+                data: {
+                    labels: buckets,
+                    datasets: [{
+                        data: cntsD,
+                        backgroundColor: ['#000', '#333', '#555', '#777', '#aaa', '#ccc'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 10,
+                                    weight: '600'
+                                },
+                                padding: 6
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => ctx.label + ': ' + ctx.raw + ' viajes'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Tendencia últimas 8 semanas
+        const cvsTend = document.getElementById('ch-ha-tendencia');
+        if (cvsTend) {
+            if (window._chHaTend)
+                window._chHaTend.destroy();
+            const semanas = [];
+            for (let s = 7; s >= 0; s--) {
+                const d = new Date(lunHoy + 'T12:00:00');
+                d.setDate(d.getDate() - s * 7);
+                const lunS = d.toISOString().slice(0, 10);
+                const domS = new Date(d);
+                domS.setDate(domS.getDate() + 6);
+                const domStr = domS.toISOString().slice(0, 10);
+                const vsS = VIAJES.filter(v => v.fecha >= lunS && v.fecha <= domStr);
+                const mS = calcMetrics(vsS);
+                semanas.push({
+                    lbl: lunS.slice(5).split('-').reverse().join('/'),
+                    neto: mS.quedo
+                });
+            }
+            const todayIdx = 7;
+            window._chHaTend = new Chart(cvsTend, {
+                type: 'line',
+                data: {
+                    labels: semanas.map(s => s.lbl),
+                    datasets: [{
+                        data: semanas.map(s => s.neto),
+                        borderColor: '#00A651',
+                        backgroundColor: 'rgba(0,166,81,0.08)',
+                        borderWidth: 2,
+                        tension: 0.35,
+                        fill: true,
+                        pointBackgroundColor: semanas.map((_, i) => i === todayIdx ? '#00A651' : 'rgba(0,166,81,.4)'),
+                        pointRadius: semanas.map((_, i) => i === todayIdx ? 5 : 3)
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => 'Me quedo: ' + CLP(ctx.raw)
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 9,
+                                    weight: '700'
+                                }
+                            }
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    // Billetera movimientos: gráficos
+    // ══════════════════════════════════════════════════════════
+    function renderWalletMovGraphs() {
+        const lun = lunesDe(today());
+        const d = new Date(lun + 'T12:00:00');
+        const dias = [];
+        for (let i = 0; i < 7; i++) {
+            const dd = new Date(d);
+            dd.setDate(dd.getDate() + i);
+            dias.push(dd.toISOString().slice(0, 10));
+        }
+        const pagosSem = WALLET_PAGOS.filter(p => dias.includes(p.fecha));
+        const totalSem = pagosSem.reduce((a, p) => a + p.monto, 0);
+        const diasConMov = [...new Set(pagosSem.map(p => p.fecha))].length;
+        const setEl = (id, v) => {
+            const e = document.getElementById(id);
+            if (e)
+                e.textContent = v;
+        };
+        setEl('bil-mov-sem-total', CLP(totalSem));
+        setEl('bil-mov-sem-count', pagosSem.length + ' movimientos');
+        setEl('bil-mov-prom-dia', diasConMov > 0 ? CLP(Math.round(totalSem / diasConMov)) : '$—');
+
+        // Dona semana por tipo
+        const cvsSem = document.getElementById('ch-bil-mov-sem');
+        if (cvsSem) {
+            if (window._chBilMovSem)
+                window._chBilMovSem.destroy();
+            const ef = pagosSem.filter(p => p.tipo === 'ef').reduce((a, p) => a + p.monto, 0);
+            const tk = pagosSem.filter(p => p.tipo === 'tk').reduce((a, p) => a + p.monto, 0);
+            const tr = pagosSem.filter(p => p.tipo === 'tr').reduce((a, p) => a + p.monto, 0);
+            const tot = ef + tk + tr;
+            if (tot > 0) {
+                window._chBilMovSem = new Chart(cvsSem, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Efectivo', 'Incentivos', 'Transfer.'],
+                        datasets: [{
+                            data: [ef, tk, tr],
+                            backgroundColor: ['#000', '#276EF1', '#FFC043'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '65%',
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: ctx => ctx.label + ': ' + CLP(ctx.raw) + ' (' + Math.round(ctx.raw / tot * 100) + '%)'
+                                }
+                            }
+                        }
+                    }
+                });
+                const legEl = document.getElementById('bil-mov-sem-legend');
+                if (legEl)
+                    legEl.innerHTML = [['Efectivo', '#000', ef], ['Incentivos', '#276EF1', tk], ['Transfer.', '#FFC043', tr]].filter(x => x[2] > 0).map(x => '<div class="dc-legend-item"><div class="dc-legend-dot" style="background:' + x[1] + '"></div><span>' + x[0] + ': ' + CLP(x[2]) + '</span></div>').join('');
+            }
+        }
+
+        // Barras últimos 7 días
+        const cvs7 = document.getElementById('ch-bil-mov-7dias');
+        if (cvs7) {
+            if (window._chBilMov7)
+                window._chBilMov7.destroy();
+            const DIAS_ES = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+            const data7 = dias.map(f => WALLET_PAGOS.filter(p => p.fecha === f).reduce((a, p) => a + p.monto, 0));
+            const colors7 = dias.map(f => f === today() ? '#000' : '#e0e0e0');
+            window._chBilMov7 = new Chart(cvs7, {
+                type: 'bar',
+                data: {
+                    labels: DIAS_ES,
+                    datasets: [{
+                        data: data7,
+                        backgroundColor: colors7,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => CLP(ctx.raw)
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // Hook into renderWalletMovimientos to also show graphs
+    const _origRenderWalletMov = renderWalletMovimientos;
+    renderWalletMovimientos = function() {
+        _origRenderWalletMov();
+        renderWalletMovGraphs();
+    };
+
+    // ══════════════════════════════════════════════════════════
+    // Combustible: update km recogida/traslado KPIs
+    // ══════════════════════════════════════════════════════════
+    const _origRenderComb = renderComb;
+    renderComb = function() {
+        _origRenderComb();
+        // Update km vacío/viaje cajas
+        const vs = VIAJES;
+        let kvTot = 0,
+            kjTot = 0;
+        // filter by period
+        const periodoFn = () => {
+            if (combPeriod === 'hoy')
+                return VIAJES.filter(v => v.fecha === today());
+            if (combPeriod === 'ayer') {
+                const ay = (() => {
+                    const d = new Date(today() + 'T12:00:00');
+                    d.setDate(d.getDate() - 1);
+                    return d.toISOString().slice(0, 10);
+                })();
+                return VIAJES.filter(v => v.fecha === ay);
+            }
+            if (combPeriod === 'semana') {
+                const lun = lunesDe(today());
+                const dom = new Date(lun + 'T12:00:00');
+                dom.setDate(dom.getDate() + 6);
+                return VIAJES.filter(v => v.fecha >= lun && v.fecha <= dom.toISOString().slice(0, 10));
+            }
+            if (combPeriod === 'mes') {
+                const ms = today().slice(0, 7);
+                return VIAJES.filter(v => v.fecha.startsWith(ms));
+            }
+            return VIAJES;
+        };
+        const vsP = periodoFn();
+        vsP.forEach(v => {
+            kvTot += (parseFloat(v.kv) || 0);
+            kjTot += (parseFloat(v.kj) || 0);
+        });
+        const setEl = (id, v) => {
+            const e = document.getElementById(id);
+            if (e)
+                e.textContent = v;
+        };
+        setEl('comb-km-vacio', Math.round(kvTot) + ' km');
+        setEl('comb-km-viaje', Math.round(kjTot) + ' km');
+    };
+
+    // ══════════════════════════════════════════════════════════
+    // Inicio: Resumen mes en turnos card
+    // ══════════════════════════════════════════════════════════
+    // This is already shown via renderMasDesktop in the right panel
+
+    // Pagos tab: default to desglose first
+    window.setPagosTab = function(sub, btn) {
+        document.getElementById('pagos-sub-app').style.display = sub === 'app' ? 'block' : 'none';
+        document.getElementById('pagos-sub-desglose').style.display = sub === 'desglose' ? 'block' : 'none';
+        document.querySelectorAll('#pagos-subtabs .pbtn').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        if (sub === 'app')
+            renderPagosApp();
+        if (sub === 'desglose')
+            renderPagosDesglose();
     };
 
     window.addEventListener('online', () => setSyncStatus('online', 'Sincronizado'));
