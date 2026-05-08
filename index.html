@@ -3,7 +3,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=1280, initial-scale=1.0, minimum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Driver Pro">
@@ -16,6 +16,47 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
+/* ── ROTATE OVERLAY ─────────────────────────────── */
+#rotate-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000;
+  z-index:99999;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:24px;
+}
+#rotate-overlay svg{
+  width:72px;height:72px;
+  fill:none;stroke:#fff;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  animation:rotate-spin 2s ease-in-out infinite;
+}
+@keyframes rotate-spin{
+  0%{transform:rotate(0deg)}
+  40%{transform:rotate(90deg)}
+  60%{transform:rotate(90deg)}
+  100%{transform:rotate(90deg)}
+}
+#rotate-overlay p{
+  color:#fff;
+  font-family:'Figtree',sans-serif;
+  font-size:16px;
+  font-weight:700;
+  text-align:center;
+  line-height:1.5;
+  max-width:260px;
+  opacity:.85;
+}
+#rotate-overlay small{
+  color:rgba(255,255,255,.4);
+  font-family:'Figtree',sans-serif;
+  font-size:12px;
+  font-weight:500;
+}
+/* ─────────────────────────────────────────────── */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--black:#000;--white:#fff;--g50:#f7f7f7;--g100:#f0f0f0;--g200:#e0e0e0;--g400:#9e9e9e;--g600:#616161;--blue:#276EF1;--green:#00A651;--red:#E11900;--amber:#FFC043;--font:'Figtree',sans-serif;--nav-h:80px;--safe:env(safe-area-inset-bottom,0px)}
 html,body{height:100%;overflow:hidden;background:#fff;font-family:var(--font);color:var(--black)}
@@ -604,6 +645,20 @@ html,body{height:100%;overflow:hidden;background:#fff;font-family:var(--font);co
 
 </head>
 <body>
+
+<!-- ── ROTATE OVERLAY ── -->
+<div id="rotate-overlay">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <!-- Phone outline -->
+    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+    <circle cx="12" cy="17.5" r="1"/>
+    <!-- Rotation arrow arc -->
+    <path d="M19 9 A9 9 0 0 0 5 9" stroke="rgba(255,255,255,.5)" stroke-width="1.5" fill="none" stroke-dasharray="3 2"/>
+    <polyline points="19 5 19 9 15 9" stroke="rgba(255,255,255,.5)" stroke-width="1.5" fill="none"/>
+  </svg>
+  <p>Gira tu dispositivo<br>para usar Driver Pro Desk</p>
+  <small>Esta app requiere vista horizontal</small>
+</div>
 
 <div id="splash">
   <img src="https://raw.githubusercontent.com/cristiantronic2000-spec/driver-pro-desktop-data/main/favicon.png" alt="Driver Pro" onerror="this.style.display='none'">
@@ -7271,6 +7326,40 @@ window.showTab = function(id){
 };
 
 // renderInicio desglose patch removed (already handled in main renderInicio)
+
+// ── ROTATE OVERLAY LOGIC ──────────────────────────────────────────────────
+(function(){
+  const overlay = document.getElementById('rotate-overlay');
+  if(!overlay) return;
+
+  function checkOrientation(){
+    // Detectar si es dispositivo móvil/tablet (touch + ancho pequeño en portrait)
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const isPortrait = window.innerHeight > window.innerWidth;
+    const isNarrow = window.innerWidth < 900; // umbral del layout desktop
+
+    if(isTouchDevice && isPortrait && isNarrow){
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    } else {
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Revisar al cargar y en cada cambio de orientación/resize
+  checkOrientation();
+  window.addEventListener('resize', checkOrientation);
+  window.addEventListener('orientationchange', function(){
+    setTimeout(checkOrientation, 300); // pequeño delay para que el browser actualice dimensiones
+  });
+  if(screen.orientation){
+    screen.orientation.addEventListener('change', function(){
+      setTimeout(checkOrientation, 300);
+    });
+  }
+})();
+// ─────────────────────────────────────────────────────────────────────────
 
 
 
